@@ -1,0 +1,13 @@
+{
+    "Calibration":{
+        "use": true,
+        "duration": 1
+    },
+
+    "SaveFile":{
+        "use": true,
+        "customLocation": true,
+        "location": "./Data"
+    }
+
+}

@@ -1,23 +1,30 @@
 import speech_recognition as sr
 
-r=sr.Recognizer()
-
 class MicHandler:
 
-    def __init__(self):
+    def __init__(self,saveLocation=None,calibrationDuration=None):
 
-        self.m_micIndex = MicHandler.getMicrophoneIndex()
+        self.recognizer = sr.Recognizer()
+        
+        loaded_microphone = self.LoadMicrophone()
 
-    def displayMicrophones():
+        if loaded_microphone != -1:
+            self.micIndex,self.micName = loaded_microphone
+        else:
+            self.micIndex,self.micName = MicHandler.GetMicrophoneInformation()
+
+        self.microphone = sr.Microphone(device_index=self.micIndex)
+        
+        self.recognizer.adjust_for_ambient_noise(self.microphone) 
+
+    def GetMicrophoneInformation():
+
         integer = 0
+        microphones = sr.Microphone.list_microphone_names()
 
-        for mic in sr.Microphone.list_microphone_names():
+        for mic in microphones:
             print(f"{integer}. {mic}")
             integer += 1
-
-    def getMicrophoneIndex():
-        
-        MicHandler.displayMicrophones()
 
         try:
             mic_index = int(input("Pick a number: "))
@@ -25,17 +32,50 @@ class MicHandler:
             print(f"FATAL ERROR: {vE}")
             return -1
         
-        return mic_index
+        return [mic_index,microphones[mic_index]]
 
-    def getPhrase(self):
+    def GetPhrase(self):
 
-        with sr.Microphone(device_index=self.m_micIndex) as source:
+        with self.microphone as source:
 
-            r.adjust_for_ambient_noise(source, duration=5)
-            print("say anything : ")
-            audio = r.listen(source)
+            self.recognizer.adjust_for_ambient_noise(source, duration=5)
+            print("Listening: ")
+            audio = self.recognizer.listen(source)
             try:
-                text = r.recognize_sphinx(audio)
+                text = self.recognizer.recognize_sphinx(audio)
                 print(text)
             except:
                 print("sorry, could not recognise")
+
+    def SaveMicrophone(self):
+        with open("Data/MicrophoneSave.micSave","w") as saveFile:
+            saveFile.write(f"Mic: {self.m_micName}")
+
+    def LoadMicrophone(self):
+
+        try:
+            with open("Data/MicrophoneSave.micSave","r") as file:
+                
+                file_contents = file.read()
+                
+                if len(file_contents) > 0:
+
+                    if ":" not in file_contents:
+                        print("Error: Expected : char in .micSave file but found none")
+                        return -1
+                    else:
+                        parsed_contents = file_contents.split(":")[1].strip()
+                        microphones = sr.Microphone.list_microphone_names()
+                        possible = [mic for mic in microphones if parsed_contents in mic or parsed_contents == mic] # grabs every microphone that matches the save file
+                
+                        if len(possible) > 0:
+                            return [microphones.index(possible[0]),possible[0]]
+                        else:
+                            return -1
+                
+        except FileNotFoundError as fileNotFoundErr:
+            return -1
+        
+    def CalibrateNoiseAdjustment(self,duration):
+        print(f"Calibrating for ambient noise. Please wait {duration} seconds...")
+        self.recognizer.adjust_for_ambient_noise(self.microphone,duration)

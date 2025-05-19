@@ -1,7 +1,5 @@
 from MicrophoneHandler import *
 
-
 micHandler = MicHandler()
-micHandler.getPhrase()
-
-
+micHandler.GetPhrase()
+micHandler.SaveMicrophone()
