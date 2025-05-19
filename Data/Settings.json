@@ -6,7 +6,6 @@
 
     "SaveFile":{
         "use": true,
-        "customLocation": true,
         "location": "./Data"
     }
 
