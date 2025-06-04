@@ -1,12 +1,22 @@
 {
     "Calibration":{
         "use": true,
-        "duration": 1
+        "autoCalibrate": false,
+        "duration": 1,
+        "energyThreshold": 50,
+        "dynamicEnergyThreshold": false
+
     },
 
     "SaveFile":{
         "use": true,
         "location": "./Data"
+    },
+
+    "Model":{
+        "use":true,
+        "modelName": "en_core_web_sm",
+        "threshold": 0.7
     }
 
 }

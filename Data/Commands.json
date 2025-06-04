@@ -1,0 +1,15 @@
+{
+
+    "KeyCommands":{
+        "boss":["f12"],
+        "gear": ["f12","a","b","c"]
+    },
+
+    "MouseCommands":{
+        "solid":["leftClick"],
+        "snake":["leftClick","rightClick"]
+    }
+
+
+
+}

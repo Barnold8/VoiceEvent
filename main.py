@@ -1,9 +1,10 @@
 from MicrophoneHandler import *
+from WordSimilarity import *
+from Command import *
 
 # Add NLTK for similarity matching for given actions defined in Commands.json
-# Implement settings.json for actually deciding logic at runtime
-
-
+# Add settings parsing for loading microphone object
+# Make wrapper class for keyboard commands to pynput keyboard pressing functions
 
 def main():
 
@@ -14,8 +15,23 @@ def main():
         micHandler = MicrophoneHandler.initMicrophone()
         micHandler.SaveMicrophone()
 
+        keys = KeyCommand()
+
+        similarityMatcher = similarity()
+
         while running:
-            micHandler.GetPhrase()
+
+            if similarityMatcher.similarity(micHandler.GetPhrase(),"big boss"):
+                keys.keyPress(["f12"])
+
+
+            
 
 
 main()
+
+
+        # keyboard = Controller()
+
+        # keyboard.press(Key.f12)
+        # keyboard.release(Key.f12)
