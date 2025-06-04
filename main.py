@@ -1,10 +1,10 @@
 from MicrophoneHandler import *
 from WordSimilarity import *
 from Command import *
+from file import *
 
 # Add NLTK for similarity matching for given actions defined in Commands.json
 # Add settings parsing for loading microphone object
-# Make wrapper class for keyboard commands to pynput keyboard pressing functions
 
 def main():
 
@@ -25,10 +25,10 @@ def main():
                 keys.keyPress(["f12"])
 
 
-            
+loadCommands("Data/Commands.json")
 
 
-main()
+# main()
 
 
         # keyboard = Controller()
