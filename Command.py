@@ -1,13 +1,19 @@
 from pynput.keyboard import Key, Controller
+from abc import ABC, abstractmethod
 from typing import List
 
 """
 This file serves as the container in which actions are made. For example, the action of pressing a key, or moving the mouse, all of it is here.
 """
 
-class KeyCommand:
+class Command(ABC):
+    @abstractmethod
+    def action(self,keySet:List[str]):
+        pass
 
-    def __init__(self):
+class KeyCommand(Command):
+
+    def __init__(self,customBindings: dict):
         self.keyboard = Controller()
 
         self.keyBindings = { # please tell me this is all of them
@@ -79,15 +85,18 @@ class KeyCommand:
            "f24":Key.f24,
         }
 
+        self.customBindings = customBindings
+
         self.dictionaryKeys = list(self.keyBindings.keys())
 
-    def keyPress(self,keySet:List[str]):
+    def action(self,keySet:List[str]):
 
         for key in keySet:
             if key in self.dictionaryKeys:
                 self.keyboard.tap(self.keyBindings[key])
             else:
                 self.keyboard.tap(key)
+    
 
 
 
