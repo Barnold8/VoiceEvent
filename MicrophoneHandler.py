@@ -11,7 +11,6 @@ class MicrophoneHandler:
         loaded_microphone = self.LoadMicrophone()
 
         if loaded_microphone != -1:
-            print(loaded_microphone)
             self.micIndex,self.micName = loaded_microphone
         else:
             self.micIndex,self.micName = MicrophoneHandler.GetMicrophoneInformation()
@@ -48,8 +47,10 @@ class MicrophoneHandler:
             try:
                 text = self.recognizer.recognize_sphinx(audio)
                 print(text)
+                return text
             except:
                 print("sorry, could not recognise")
+                return "N/A"
 
     def SaveMicrophone(self):
         with open("Data/MicrophoneSave.micSave","w") as saveFile:
@@ -82,11 +83,16 @@ class MicrophoneHandler:
         except FileNotFoundError as fileNotFoundErr:
             return -1
         
-    def CalibrateNoiseAdjustment(self,duration):
+    def CalibrateNoiseAdjustment(self,autoCalibrate=False,duration=1,energyThreshold=50,dyamicEnergyThreshold=False):
         grammar = "seconds" if duration > 1 else "second"
-        print(f"Calibrating for ambient noise. Please wait {duration} {grammar}...")
-        with self.microphone as source:
-            self.recognizer.adjust_for_ambient_noise(self.microphone,duration)
+
+        if autoCalibrate:
+            print(f"Calibrating for ambient noise. Please wait {duration} {grammar}...")
+            with self.microphone as source:
+                self.recognizer.adjust_for_ambient_noise(self.microphone,duration)
+        else:
+            self.recognizer.energy_threshold = energyThreshold
+            self.recognizer.dynamic_energy_threshold = dyamicEnergyThreshold
 
     def initMicrophone():
         try:
