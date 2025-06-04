@@ -1,6 +1,7 @@
 from pynput.keyboard import Key, Controller
 from abc import ABC, abstractmethod
 from typing import List
+from WordSimilarity import *
 
 """
 This file serves as the container in which actions are made. For example, the action of pressing a key, or moving the mouse, all of it is here.
@@ -8,7 +9,7 @@ This file serves as the container in which actions are made. For example, the ac
 
 class Command(ABC):
     @abstractmethod
-    def action(self,keySet:List[str]):
+    def action(self,phrase:str,similarityObject:Similarity):
         pass
 
 class KeyCommand(Command):
@@ -87,16 +88,24 @@ class KeyCommand(Command):
 
         self.customBindings = customBindings
 
-        self.dictionaryKeys = list(self.keyBindings.keys())
+        self.keyBindingsKeys = list(self.keyBindings.keys())
+        self.customBindingsKeys = list(customBindings.keys())
 
-    def action(self,keySet:List[str]):
+    def keyPress(self,keySet:List[str]):
 
         for key in keySet:
-            if key in self.dictionaryKeys:
+            if key in self.keyBindingsKeys:
                 self.keyboard.tap(self.keyBindings[key])
             else:
                 self.keyboard.tap(key)
     
+    def action(self,phrase:str,similarityObject:Similarity):
+
+        for key in self.customBindingsKeys:
+            if similarityObject.similarity(phrase,key):
+                self.keyPress(self.customBindings[key])
+
+        
 
 
 

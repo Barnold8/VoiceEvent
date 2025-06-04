@@ -1,5 +1,4 @@
 from MicrophoneHandler import *
-from WordSimilarity import *
 from Command import *
 from file import *
 
@@ -15,23 +14,15 @@ def main():
         micHandler = MicrophoneHandler.initMicrophone()
         micHandler.SaveMicrophone()
 
-        keys = KeyCommand()
+        commandObjects = loadCommands("Data/Commands.json")
 
-        similarityMatcher = similarity()
+        similarityMatcher = Similarity()
 
         while running:
 
-            if similarityMatcher.similarity(micHandler.GetPhrase(),"big boss"):
-                keys.keyPress(["f12"])
+            userSpeech = micHandler.GetPhrase()
 
+            for object in commandObjects:
+                object.action(userSpeech,similarityMatcher)
 
-loadCommands("Data/Commands.json")
-
-
-# main()
-
-
-        # keyboard = Controller()
-
-        # keyboard.press(Key.f12)
-        # keyboard.release(Key.f12)
+main()

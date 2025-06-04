@@ -5,7 +5,6 @@
         "duration": 1,
         "energyThreshold": 50,
         "dynamicEnergyThreshold": false
-
     },
 
     "SaveFile":{

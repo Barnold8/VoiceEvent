@@ -2,7 +2,7 @@ import spacy
 import os
 import warnings
 
-class similarity:
+class Similarity:
 
     # spacy.load()
 
@@ -24,7 +24,6 @@ class similarity:
 
         userInputDocument = self.nlp(userInput)
         test = self.nlp(instructionSet)
-        similarity = userInputDocument.similarity(test)
         print(f"Sim: {userInputDocument.similarity(test)} | Threshold: {self.threshold}")
         return userInputDocument.similarity(test) > self.threshold
 

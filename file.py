@@ -22,6 +22,7 @@ def loadCommands(filePath:str) -> list:
 
         for key in commandFileKeys:
             if key.lower() in commandTypeKeys:
-                commandObjects.append(commandTypes[key.lower()]())
+                # append supported object via a reference to its class in commandTypes and provide it with data binding found within Commands.json
+                commandObjects.append(commandTypes[key.lower()](contents[key]))
 
     return commandObjects
